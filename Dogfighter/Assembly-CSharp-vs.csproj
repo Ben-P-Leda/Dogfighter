@@ -53,6 +53,7 @@
      <Compile Include="Assets\Gameplay\Scripts\Player\Motion.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\Health.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\StatusManager.cs" />
+     <Compile Include="Assets\Shared\Scripts\SoundEffectPlayer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

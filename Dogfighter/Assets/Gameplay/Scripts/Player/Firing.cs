@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Gameplay.Scripts.GameControl;
+using Shared.Scripts;
 
 namespace Gameplay.Scripts.Player
 {
@@ -34,6 +35,7 @@ namespace Gameplay.Scripts.Player
                 }
 
                 _timeToNextShot = Time_Between_Shots;
+                SoundEffectPlayer.PlaySound("gun");
             }
 
             _timeToNextShot = Mathf.Max(_timeToNextShot - Time.deltaTime, 0.0f);

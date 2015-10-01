@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Shared.Scripts;
 
 namespace Gameplay.Scripts.Status
 {
@@ -38,6 +39,7 @@ namespace Gameplay.Scripts.Status
         public void TakeDamage(float damageValue, string sourceId)
         {
             _hitPoints -= damageValue;
+            SoundEffectPlayer.PlaySound("ricochet", Random.Range(0.5f, 1.5f));
         }
     }
 }
