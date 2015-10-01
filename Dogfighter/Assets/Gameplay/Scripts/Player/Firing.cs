@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Gameplay.Scripts.GameControl;
 
 namespace Gameplay.Scripts.Player
 {
@@ -7,32 +8,39 @@ namespace Gameplay.Scripts.Player
         private Transform _transform;
         private RaycastHit _raycastHit;
 
-        public string PlayerId { private get; set; }
-
-        public string RayHit;
+        private string _playerId;
+        private float _timeToNextShot;
 
         private void Awake()
         {
+            _playerId = transform.parent.tag;
+
             _transform = transform;
             _raycastHit = new RaycastHit();
-        }
 
-        private void Start()
-        {
-            Debug.Log(gameObject.name + ": Fire control axisPrefix assigned = " + PlayerId);
+            _timeToNextShot = 0.0f;
         }
 
         private void FixedUpdate()
         {
-            if (Input.GetAxis(PlayerId + " Fire1") > 0.0f)
+            if ((Input.GetAxis(_playerId + " Fire1") > 0.0f) && (_timeToNextShot == 0.0f))
             {
                 Ray ray = new Ray(_transform.position + (_transform.forward * Gun_Offset), _transform.forward);
                 bool raycastHasHit = Physics.Raycast(ray, out _raycastHit, Gun_Range);
-                if (raycastHasHit) { RayHit = _raycastHit.collider.tag; }
+
+                if (raycastHasHit) 
+                {
+                    PlayerToPlayerDamage.InflictDamage(_raycastHit.collider.tag, 1.0f, _playerId);
+                }
+
+                _timeToNextShot = Time_Between_Shots;
             }
+
+            _timeToNextShot = Mathf.Max(_timeToNextShot - Time.deltaTime, 0.0f);
         }
 
-        private const float Gun_Range = 1000.0f;
+        private const float Gun_Range = 100.0f;
         private const float Gun_Offset = 3.0f;
+        private const float Time_Between_Shots = 0.125f;
     }
 }

@@ -15,11 +15,6 @@ namespace Gameplay.Scripts.Player
             _targetTransform = ChaseTarget.transform;
         }
 
-        private void Start()
-        {
-            Debug.Log(gameObject.name + " chasing " + ChaseTarget.name);
-        }
-
         private void FixedUpdate()
         {
             Vector3 focalTarget = _targetTransform.position - _targetTransform.forward * 10.0f + Vector3.up * 5.0f;

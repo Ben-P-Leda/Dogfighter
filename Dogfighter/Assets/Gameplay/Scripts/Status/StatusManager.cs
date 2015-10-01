@@ -9,7 +9,7 @@ namespace Gameplay.Scripts.Status
         private float _scaling;
         private GUIStyle _guiStyle;
 
-        public string PlayerId { get; set; }
+        public string PlayerId { get; private set; }
 
         public Rect ViewportScreenArea 
         {  
@@ -31,6 +31,8 @@ namespace Gameplay.Scripts.Status
 
         private void Awake()
         {
+            PlayerId = transform.parent.tag;
+
             _initialized = false;
         }
 

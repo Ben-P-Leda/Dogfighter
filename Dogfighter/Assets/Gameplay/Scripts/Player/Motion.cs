@@ -7,22 +7,17 @@ namespace Gameplay.Scripts.Player
         private Transform _transform;
         private Terrain _terrain;
         private Transform _modelTransform;
+        private string _playerId;
 
         private float _engineSpeed;
         private float _airSpeed;
-        public float _bankingRoll;
-        public float targetBankingRoll;
+        private float _bankingRoll;
         private bool _outOfControl;
-
-        public string PlayerId { private get; set; }
-
-        public float MaximumSpeed;
-        public float AirSpeed;
-
-        public float Pitch;
 
         private void Awake()
         {
+            _playerId = transform.parent.tag;
+
             _transform = transform;
             _terrain = Terrain.activeTerrain;
 
@@ -32,12 +27,6 @@ namespace Gameplay.Scripts.Player
             _airSpeed = 50.0f;
             _bankingRoll = 0.0f;
             _outOfControl = false;
-        }
-
-        private void Start()
-        {
-            Debug.Log("Movement enabled for " + gameObject.name);
-            Debug.Log(gameObject.name + ": Movement control axisPrefix assigned = " + PlayerId);
         }
 
         private void FixedUpdate()
@@ -60,9 +49,6 @@ namespace Gameplay.Scripts.Player
             float maximumSpeed = Mathf.Max(0.0f, _engineSpeed + gravityEffectValue + excessAltitudeEffectValue);
 
             _airSpeed = Mathf.Clamp(_airSpeed + (Base_Acceleration * Time.deltaTime), 0.0f, maximumSpeed);
-
-            MaximumSpeed = maximumSpeed;
-            AirSpeed = _airSpeed;
         }
 
         private float CalculateGravitySlowDownValue()
@@ -97,7 +83,7 @@ namespace Gameplay.Scripts.Player
         {
             return _outOfControl 
                 ? new Vector2(0.0f, 1.0f)
-                : new Vector2(Input.GetAxis(PlayerId + " Horizontal"), Input.GetAxis(PlayerId + " Vertical"));
+                : new Vector2(Input.GetAxis(_playerId + " Horizontal"), Input.GetAxis(_playerId + " Vertical"));
         }
 
         private void UpdateDirection(Vector2 controlValues)
@@ -111,7 +97,7 @@ namespace Gameplay.Scripts.Player
         {
             if (controlValues.x != 0.0f)
             {
-                targetBankingRoll = Mathf.Abs(controlValues.x * Maximum_Banking_Roll);
+                float targetBankingRoll = Mathf.Abs(controlValues.x * Maximum_Banking_Roll);
                 _bankingRoll = Mathf.Clamp(_bankingRoll - (2.0f * Banking_Roll_Speed * controlValues.x), -targetBankingRoll, targetBankingRoll);
             }
             else if (Mathf.Abs(_bankingRoll) < Banking_Roll_Speed)
@@ -139,7 +125,6 @@ namespace Gameplay.Scripts.Player
 
         private const float Maximum_Banking_Roll = 75.0f;
         private const float Banking_Roll_Speed = 2.0f;
-        private const float Bank_Roll_Bias = 0.25f;
         private const float Engine_Speed = 50.0f;
         private const float Base_Acceleration = 20.0f;
         private const float Motion_Drag = 1.0f;

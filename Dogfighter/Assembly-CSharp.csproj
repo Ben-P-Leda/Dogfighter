@@ -46,13 +46,12 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Gameplay\Scripts\GameController.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerToPlayerDamage.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\AssignColour.cs" />
-     <Compile Include="Assets\Gameplay\Scripts\Player\AssignPlayerId.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\ChaseCamera.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\Firing.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\Motion.cs" />
-     <Compile Include="Assets\Gameplay\Scripts\Status\ArmourGauge.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Status\Health.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\StatusManager.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
