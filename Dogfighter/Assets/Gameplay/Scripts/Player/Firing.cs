@@ -31,7 +31,7 @@ namespace Gameplay.Scripts.Player
 
                 if (raycastHasHit) 
                 {
-                    PlayerToPlayerDamage.InflictDamage(_raycastHit.collider.tag, 1.0f, _playerId);
+                    PlayerToPlayerDamage.InflictDamage(_raycastHit.collider.tag, 5.0f, _playerId);
                 }
 
                 _timeToNextShot = Time_Between_Shots;
