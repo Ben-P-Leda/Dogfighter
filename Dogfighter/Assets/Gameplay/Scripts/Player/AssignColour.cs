@@ -6,11 +6,18 @@ namespace Gameplay.Scripts.Player
     {
         public Color Colour;
 
-        private void Start()
+        private void Awake()
         {
-            for (int i = 0; i < transform.childCount; i++)
+            AssignColourToModel();
+        }
+
+        private void AssignColourToModel()
+        {
+            Transform modelTransform = transform.FindChild("Plane").FindChild("Plane Model");
+
+            for (int i = 0; i < modelTransform.childCount; i++)
             {
-                MeshRenderer renderer = transform.GetChild(i).GetComponent<MeshRenderer>();
+                MeshRenderer renderer = modelTransform.GetChild(i).GetComponent<MeshRenderer>();
                 if (renderer != null) { renderer.material.color = Colour; }
             }
         }

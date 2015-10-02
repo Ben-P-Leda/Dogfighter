@@ -6,10 +6,10 @@ namespace Gameplay.Scripts.Status
     {
         private bool _initialized;
         private Rect _viewportScreenArea;
-        private float _scaling;
         private GUIStyle _guiStyle;
 
         public string PlayerId { get; private set; }
+        public float Scaling { get; private set; }
 
         public Rect ViewportScreenArea 
         {  
@@ -38,7 +38,7 @@ namespace Gameplay.Scripts.Status
 
         private void Initialize()
         {
-            _scaling = Screen.height / One_To_One_Screen_Height;
+            Scaling = Screen.height / One_To_One_Screen_Height;
 
             GetViewportScreenArea();
             CreateCommonGuiStyle();
@@ -60,7 +60,7 @@ namespace Gameplay.Scripts.Status
         {
             _guiStyle = new GUIStyle();
             _guiStyle.fontStyle = FontStyle.Bold;
-            _guiStyle.fontSize = (int)(14 * _scaling);
+            _guiStyle.fontSize = (int)(14 * Scaling);
             _guiStyle.wordWrap = true;
         }
 
@@ -68,10 +68,10 @@ namespace Gameplay.Scripts.Status
         {
             if (!_initialized) { Initialize(); }
 
-            horizontalMargin *= _scaling;
-            verticalMargin *= _scaling;
-            width *= _scaling;
-            height *= _scaling;
+            horizontalMargin *= Scaling;
+            verticalMargin *= Scaling;
+            width *= Scaling;
+            height *= Scaling;
 
             float left = _viewportScreenArea.x + ((_viewportScreenArea.width - width) / 2.0f);
             float top = _viewportScreenArea.y + ((_viewportScreenArea.height - height) / 2.0f);

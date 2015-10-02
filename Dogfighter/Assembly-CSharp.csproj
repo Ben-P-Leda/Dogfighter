@@ -46,12 +46,16 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\Helpers\RadarData.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerPositionTracker.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerRegistration.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerToPlayerDamage.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\AssignColour.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\ChaseCamera.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\Firing.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\Motion.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\Health.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Status\Radar.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\StatusManager.cs" />
      <Compile Include="Assets\Shared\Scripts\SoundEffectPlayer.cs" />
  <Reference Include="UnityEngine.UI">

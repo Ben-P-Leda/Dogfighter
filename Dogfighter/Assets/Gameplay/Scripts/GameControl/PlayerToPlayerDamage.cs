@@ -11,22 +11,23 @@ namespace Gameplay.Scripts.GameControl
 
         private Dictionary<string, Health> _healthControllers;
 
-        public List<GameObject> Players;
-
         private void Awake()
         {
             _instance = this;
-
             _healthControllers = new Dictionary<string,Health>();
-            for (int i=0; i<Players.Count; i++)
-            {
-                _healthControllers.Add(Players[i].tag, Players[i].transform.FindChild("Status Manager").FindChild("Health").GetComponent<Health>());
-            }
+        }
+
+        public void RegisterPlayer(GameObject player)
+        {
+            _healthControllers.Add(player.tag, player.transform.FindChild("Status Manager").FindChild("Health").GetComponent<Health>());
         }
 
         private void SendDamageToPlayer(string targetId, float value, string sourceId)
         {
-            _healthControllers[targetId].TakeDamage(value, sourceId);
+            if (_healthControllers.ContainsKey(targetId))
+            {
+                _healthControllers[targetId].TakeDamage(value, sourceId);
+            }
         }
     }
 }

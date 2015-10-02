@@ -124,7 +124,7 @@ namespace Gameplay.Scripts.Player
         }
 
         private const float Maximum_Banking_Roll = 75.0f;
-        private const float Banking_Roll_Speed = 2.0f;
+        private const float Banking_Roll_Speed = 8.0f;
         private const float Engine_Speed = 50.0f;
         private const float Base_Acceleration = 20.0f;
         private const float Motion_Drag = 1.0f;
