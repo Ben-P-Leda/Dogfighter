@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Gameplay.Scripts.Status
+namespace Gameplay.Scripts.Display
 {
-    public class StatusManager : MonoBehaviour
+    public class SplitScreenDisplayManager : MonoBehaviour
     {
         private bool _initialized;
         private Rect _viewportScreenArea;
@@ -48,7 +48,7 @@ namespace Gameplay.Scripts.Status
 
         private void GetViewportScreenArea()
         {
-            Camera camera = transform.parent.FindChild("Camera").GetComponent<Camera>();
+            Camera camera = transform.FindChild("Camera").GetComponent<Camera>();
 
             Vector3 topLeft = camera.ViewportToScreenPoint(Vector3.zero);
             Vector3 bottomRight = camera.ViewportToScreenPoint(new Vector3(1.0f, 1.0f, 0.0f));

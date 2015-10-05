@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Shared.Scripts;
 using Gameplay.Scripts.GameControl.Helpers;
+using Gameplay.Scripts.Display;
 
 namespace Gameplay.Scripts.Status
 {
@@ -33,7 +34,7 @@ namespace Gameplay.Scripts.Status
 
         private void SetUpDisplay()
         {
-            StatusManager manager = transform.parent.GetComponent<StatusManager>();
+            SplitScreenDisplayManager manager = transform.parent.parent.GetComponent<SplitScreenDisplayManager>();
             _scaling = manager.Scaling;
 
             _displayArea = manager.ScaleToDisplay(BaseImage.width, BaseImage.height, TextAnchor.LowerLeft, 30.0f, 30.0f);

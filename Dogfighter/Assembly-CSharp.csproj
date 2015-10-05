@@ -46,6 +46,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Gameplay\Scripts\Display\SplitScreenDisplayManager.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Effects\ChromeText\PopupText.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Effects\Particles\ExplosionPool.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Effects\Particles\PooledParticleEffect.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\Helpers\RadarData.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerPositionTracker.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerRegistration.cs" />
@@ -53,10 +57,12 @@
      <Compile Include="Assets\Gameplay\Scripts\Player\AssignColour.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\ChaseCamera.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\Firing.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Player\LandingGear.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\Motion.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\Health.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\Radar.cs" />
-     <Compile Include="Assets\Gameplay\Scripts\Status\StatusManager.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Status\Speed.cs" />
+     <Compile Include="Assets\Shared\Scripts\GenericObjectPool.cs" />
      <Compile Include="Assets\Shared\Scripts\SoundEffectPlayer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

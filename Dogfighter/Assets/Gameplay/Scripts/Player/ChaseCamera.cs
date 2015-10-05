@@ -26,5 +26,6 @@ namespace Gameplay.Scripts.Player
         }
 
         private const float Bias_Toward_Focal_Target = 0.05f;
+        private const float Downward_Pan_Limit = 75.0f;
     }
 }
