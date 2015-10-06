@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Shared.Scripts;
-using Gameplay.Scripts.Display;
 
 namespace Gameplay.Scripts.Status
 {
@@ -23,7 +22,7 @@ namespace Gameplay.Scripts.Status
 
         private void SetUpDisplay()
         {
-            SplitScreenDisplayManager manager = transform.parent.parent.GetComponent<SplitScreenDisplayManager>();
+            StatusDisplayManager manager = transform.parent.GetComponent<StatusDisplayManager>();
 
             _textArea = manager.ScaleToDisplay(100, 20, TextAnchor.LowerRight, 30.0f, 30.0f);
             _guiStyle = manager.GuiStyle;

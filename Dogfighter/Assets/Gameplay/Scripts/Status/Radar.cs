@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Shared.Scripts;
 using Gameplay.Scripts.GameControl.Helpers;
-using Gameplay.Scripts.Display;
 
 namespace Gameplay.Scripts.Status
 {
@@ -20,8 +19,6 @@ namespace Gameplay.Scripts.Status
         public Texture BaseImage;
         public Texture BlipImage;
 
-        public float col;
-
         private void Awake()
         {
             _planeTransform = transform.parent.parent.FindChild("Plane");
@@ -34,7 +31,7 @@ namespace Gameplay.Scripts.Status
 
         private void SetUpDisplay()
         {
-            SplitScreenDisplayManager manager = transform.parent.parent.GetComponent<SplitScreenDisplayManager>();
+            StatusDisplayManager manager = transform.parent.GetComponent<StatusDisplayManager>();
             _scaling = manager.Scaling;
 
             _displayArea = manager.ScaleToDisplay(BaseImage.width, BaseImage.height, TextAnchor.LowerLeft, 30.0f, 30.0f);
@@ -84,8 +81,6 @@ namespace Gameplay.Scripts.Status
 
             GUI.color = blipColour;
             GUI.DrawTexture(blipRect, BlipImage);
-
-            col = blipColour.a;
         }
 
         private float Maximum_Detection_Range = 1000.0f;

@@ -11,6 +11,7 @@ namespace Gameplay.Scripts.GameControl
         {
             PlayerToPlayerDamage playerDamageHandler = GetComponent<PlayerToPlayerDamage>();
             PlayerPositionTracker playerTracker = GetComponent<PlayerPositionTracker>();
+            PlayerDeathHandler playerDeathHandler = GetComponent<PlayerDeathHandler>();
 
             for (int i = 0; i < Players.Count; i++)
             {
@@ -18,6 +19,7 @@ namespace Gameplay.Scripts.GameControl
                 {
                     playerDamageHandler.RegisterPlayer(Players[i]);
                     playerTracker.RegisterPlayer(Players[i]);
+                    playerDeathHandler.RegisterPlayer(Players[i]);
                 }
             }
 

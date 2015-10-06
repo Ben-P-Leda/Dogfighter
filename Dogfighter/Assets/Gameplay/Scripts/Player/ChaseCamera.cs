@@ -25,6 +25,11 @@ namespace Gameplay.Scripts.Player
             _transform.LookAt(_targetTransform.position + _targetTransform.forward * 30.0f);
         }
 
+        public void SetForNewLife()
+        {
+            _transform.position = _targetTransform.position;
+        }
+
         private const float Bias_Toward_Focal_Target = 0.05f;
         private const float Downward_Pan_Limit = 75.0f;
     }
