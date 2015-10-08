@@ -84,6 +84,6 @@ namespace Gameplay.Scripts.Status
         }
 
         private float Maximum_Detection_Range = 1000.0f;
-        private float Altitude_Blip_Size_Modifier = 0.01f;
+        private float Altitude_Blip_Size_Modifier = 0.005f;
     }
 }

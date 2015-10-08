@@ -7,7 +7,7 @@ namespace Gameplay.Scripts.GameControl
     {
         public List<GameObject> Players;
 
-        private void Awake()
+        private void Start()
         {
             PlayerToPlayerDamage playerDamageHandler = GetComponent<PlayerToPlayerDamage>();
             PlayerPositionTracker playerTracker = GetComponent<PlayerPositionTracker>();

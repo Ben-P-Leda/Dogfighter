@@ -7,16 +7,13 @@ namespace Gameplay.Scripts.Player
     {
         private Transform _transform;
         private Transform _modelTransform;
+        private Collisions _collisionController;
         private string _playerId;
-
-        private Terrain[][] _terrains;
 
         private float _engineSpeed;
         private float _airSpeed;
         private float _bankingRoll;
         private bool _outOfControl;
-        private bool _onGround;
-        private bool _crashed;
 
         public float EngineSpeedFraction { get { return _engineSpeed / MaximumAirSpeed; } }
 
@@ -31,37 +28,12 @@ namespace Gameplay.Scripts.Player
             _transform = transform;
             _modelTransform = _transform.FindChild("Plane Model").transform;
 
-            CreateTerrainGrid();
-        }
-
-        private void CreateTerrainGrid()
-        {
-            int maxX = 0;
-            int maxZ = 0;
-
-            foreach (Terrain terrain in Terrain.activeTerrains)
-            {
-                maxX = Mathf.Max(TerrainGridPosition(terrain.transform.position.x), maxX);
-                maxZ = Mathf.Max(TerrainGridPosition(terrain.transform.position.z), maxZ);
-            }
-
-            _terrains = new Terrain[maxX + 1][];
-            for (int i = 0; i < maxX + 1; i++) { _terrains[i] = new Terrain[maxZ + 1]; }
-
-            foreach (Terrain terrain in Terrain.activeTerrains)
-            {
-                _terrains[TerrainGridPosition(terrain.transform.position.x)][TerrainGridPosition(terrain.transform.position.z)] = terrain;
-            }
-        }
-
-        private int TerrainGridPosition(float worldPosition)
-        {
-            return Mathf.FloorToInt(worldPosition / Terrain_Side_Length);
+            _collisionController = GetComponent<Collisions>();
         }
 
         private void FixedUpdate()
         {
-            if (!_crashed)
+            if (!_collisionController.Crashed)
             {
                 SetAirSpeed();
                 SetInControlState();
@@ -71,8 +43,6 @@ namespace Gameplay.Scripts.Player
                 UpdateDirection(steeringControlValues);
                 UpdateRollForBanking(steeringControlValues);
                 UpdatePosition();
-
-                HandleGroundImpacts();
             }
         }
 
@@ -106,7 +76,7 @@ namespace Gameplay.Scripts.Player
 
         private void SetInControlState()
         {
-            if (_onGround)
+            if (_collisionController.OnGround)
             {
                 _outOfControl = false;
             }
@@ -122,13 +92,29 @@ namespace Gameplay.Scripts.Player
 
         private Vector2 GetSteeringControlValues()
         {
-            Vector2 controlValues;
+            return _collisionController.OnGround
+                ? GetOnGroundControls()
+                : GetInFlightControls();
+        }
 
-            if (_onGround) { controlValues = new Vector2(0.0f, Mathf.Min(0.0f, Input.GetAxis(_playerId + " Vertical"))); }
-            else if (_outOfControl) { controlValues = Vector2.up; }
-            else { controlValues = new Vector2(Input.GetAxis(_playerId + " Horizontal"), Input.GetAxis(_playerId + " Vertical"));}
+        private Vector2 GetOnGroundControls()
+        {
+            float yaw = (_airSpeed > 0.0f) 
+                ? Input.GetAxis(_playerId + " Horizontal") 
+                : 0.0f;
 
-            return controlValues;
+            float pitch = (_airSpeed > Minimum_Takeoff_Speed)
+                ? Input.GetAxis(_playerId + " Vertical")
+                : 0.0f;
+
+            return new Vector2(yaw, pitch);
+        }
+
+        private Vector2 GetInFlightControls()
+        {
+            return _outOfControl
+                ? Vector2.up
+                : new Vector2(Input.GetAxis(_playerId + " Horizontal"), Input.GetAxis(_playerId + " Vertical"));
         }
 
         private void UpdateDirection(Vector2 controlValues)
@@ -150,22 +136,25 @@ namespace Gameplay.Scripts.Player
 
         private void UpdateRollForBanking(Vector2 controlValues)
         {
-            if (controlValues.x != 0.0f)
+            if ((!_collisionController.OnGround) || (_airSpeed >= Minimum_Flying_Speed))
             {
-                float targetBankingRoll = Mathf.Abs(controlValues.x * Maximum_Banking_Roll);
-                _bankingRoll = Mathf.Clamp(_bankingRoll - (2.0f * Banking_Roll_Speed * controlValues.x * TurnSpeed), 
-                    -targetBankingRoll, targetBankingRoll);
-            }
-            else if (Mathf.Abs(_bankingRoll) < Banking_Roll_Speed)
-            {
-                _bankingRoll = 0.0f;
-            }
-            else
-            {
-                _bankingRoll -= Mathf.Sign(_bankingRoll) * Banking_Roll_Speed * TurnSpeed;
-            }
+                if (controlValues.x != 0.0f)
+                {
+                    float targetBankingRoll = Mathf.Abs(controlValues.x * Maximum_Banking_Roll);
+                    _bankingRoll = Mathf.Clamp(_bankingRoll - (2.0f * Banking_Roll_Speed * controlValues.x * TurnSpeed),
+                        -targetBankingRoll, targetBankingRoll);
+                }
+                else if (Mathf.Abs(_bankingRoll) < Banking_Roll_Speed)
+                {
+                    _bankingRoll = 0.0f;
+                }
+                else
+                {
+                    _bankingRoll -= Mathf.Sign(_bankingRoll) * Banking_Roll_Speed * TurnSpeed;
+                }
 
-            _modelTransform.localRotation = Quaternion.Euler(0.0f, 0.0f, _bankingRoll);
+                _modelTransform.localRotation = Quaternion.Euler(0.0f, 0.0f, _bankingRoll);
+            }
         }
 
         private void UpdatePosition()
@@ -173,68 +162,25 @@ namespace Gameplay.Scripts.Player
             _transform.position += _transform.forward * Time.deltaTime * _airSpeed;
         }
 
-        private void HandleGroundImpacts()
-        {
-            float centerTerrainHeight = TerrainHeightAtPosition(_transform.position);
-            float noseTerrainHeight = TerrainHeightAtPosition(_transform.position + (Vector3.forward * Center_To_Nose_Distance));
-
-            _onGround = false;
-            if (centerTerrainHeight + Landing_Altitude >= _transform.position.y)
-            {
-                float pitch = _transform.eulerAngles.x;
-                float roll = _transform.eulerAngles.z;
-                if ((pitch >= 0.0f) && (pitch <= Landing_Maximum_Pitch) && (roll == 0.0f))
-                {
-                    _onGround = true;
-                    _transform.position = new Vector3(_transform.position.x, centerTerrainHeight + Landing_Altitude, _transform.position.z);
-                }
-            }
-
-            if (noseTerrainHeight > _transform.position.y)
-            {
-                _crashed = true;
-                _transform.position = new Vector3(_transform.position.x, centerTerrainHeight, _transform.position.z);
-
-                PlayerDeathHandler.TriggerDeath(_playerId, "");
-            }
-        }
-
-        private float TerrainHeightAtPosition(Vector3 position)
-        {
-            Terrain activeTerrain = _terrains[TerrainGridPosition(position.x)][TerrainGridPosition(position.z)];
-            return activeTerrain.SampleHeight(position);
-        }
-
         public void SetForNewLife()
         {
-            _transform.localPosition = new Vector3(0.0f, Landing_Altitude, 0.0f);
-            _transform.localRotation = Quaternion.Euler(0.0f, 45.0f, 0.0f);
-
             _modelTransform.localRotation = Quaternion.Euler(Vector3.zero);
 
-            _engineSpeed = 1.0f;
-            _airSpeed = 5.0f;
+            _engineSpeed = 0.0f;
+            _airSpeed = 0.0f;
             _bankingRoll = 0.0f;
             _outOfControl = false;
-            _onGround = true;
-            _crashed = false;
         }
-
-        private const float Terrain_Side_Length = 500.0f;
 
         private const float Maximum_Banking_Roll = 75.0f;
         private const float Banking_Roll_Speed = 8.0f;
-        private const float Engine_Speed = 50.0f;
-        private const float Base_Acceleration = 20.0f;
+        private const float Base_Acceleration = 30.0f;
         private const float Motion_Drag = 1.0f;
         private const float Maximum_Altitude = 100.0f;
         private const float Excess_Altitude_Drag = 5.0f;
-        private const float Minimum_Flying_Speed = 20.0f;
+        private const float Minimum_Flying_Speed = 10.0f;
+        private const float Minimum_Takeoff_Speed = 30.0f;
         private const float Control_Regain_Speed = 40.0f;
         private const float Maximum_Fall_Angle = 75.0f;
-
-        private const float Landing_Altitude = 1.05f;
-        private const float Landing_Maximum_Pitch = 5.0f;
-        private const float Center_To_Nose_Distance = 2.5f;
     }
 }

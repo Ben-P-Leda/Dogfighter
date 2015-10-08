@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Gameplay.Scripts.Status.Messages;
 
 namespace Gameplay.Scripts.Status
 {
@@ -6,10 +7,15 @@ namespace Gameplay.Scripts.Status
     {
         private bool _initialized;
         private Rect _viewportScreenArea;
-        private GUIStyle _guiStyle;
+
+        private Health _healthController;
+
+        private MessageText _startMessagePopup;
+        private RestartTimer _restartTimer;
 
         public string PlayerId { get; private set; }
         public float Scaling { get; private set; }
+        public bool ReadyToRespawn { get { return _restartTimer.ReadyToRespawn; } }
 
         public Rect ViewportScreenArea 
         {  
@@ -20,18 +26,14 @@ namespace Gameplay.Scripts.Status
             }
         }
 
-        public GUIStyle GuiStyle
-        {
-            get
-            {
-                if (!_initialized) { Initialize(); }
-                return _guiStyle;
-            }
-        }
-
         private void Awake()
         {
             PlayerId = transform.parent.tag;
+
+            _healthController = transform.FindChild("Health").GetComponent<Health>();
+
+            _startMessagePopup = transform.FindChild("Messages").FindChild("Life Start").GetComponent<MessageText>();
+            _restartTimer = transform.FindChild("Messages").FindChild("Restart Timer").GetComponent<RestartTimer>();
 
             _initialized = false;
         }
@@ -41,7 +43,6 @@ namespace Gameplay.Scripts.Status
             Scaling = Screen.height / One_To_One_Screen_Height;
 
             GetViewportScreenArea();
-            CreateCommonGuiStyle();
 
             _initialized = true;
         }
@@ -54,14 +55,6 @@ namespace Gameplay.Scripts.Status
             Vector3 bottomRight = camera.ViewportToScreenPoint(new Vector3(1.0f, 1.0f, 0.0f));
 
             _viewportScreenArea = new Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
-        }
-
-        private void CreateCommonGuiStyle()
-        {
-            _guiStyle = new GUIStyle();
-            _guiStyle.fontStyle = FontStyle.Bold;
-            _guiStyle.fontSize = (int)(14 * Scaling);
-            _guiStyle.wordWrap = true;
         }
 
         public Rect ScaleToDisplay(float width, float height, TextAnchor alignment, float horizontalMargin, float verticalMargin)
@@ -95,6 +88,17 @@ namespace Gameplay.Scripts.Status
             }
 
             return new Rect(left, top, width, height);
+        }
+
+        public void SetForNewLife()
+        {
+            _healthController.SetForNewLife();
+            _startMessagePopup.Activate();
+        }
+
+        public void SetForDeath()
+        {
+            _restartTimer.Activate();
         }
 
         private const float One_To_One_Screen_Height = 675.0f;

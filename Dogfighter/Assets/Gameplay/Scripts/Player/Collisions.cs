@@ -6,19 +6,19 @@ namespace Gameplay.Scripts.Player
     public class Collisions : MonoBehaviour
     {
         private Transform _transform;
-        private GameObject _modelObject;
+        private Transform _modelTransform;
         private string _playerId;
 
         private Terrain[][] _terrains;
 
-        public bool OnGround { get; set; }
+        public bool OnGround { get; private set; }
+        public bool Crashed { get; private set; }
 
         private void Awake()
         {
             _playerId = transform.parent.tag;
-
             _transform = transform;
-            _modelObject = _transform.FindChild("Plane Model").gameObject;
+            _modelTransform = _transform.FindChild("Plane Model").transform;
 
             CreateTerrainGrid();
         }
@@ -50,7 +50,7 @@ namespace Gameplay.Scripts.Player
 
         private void FixedUpdate()
         {
-            if (!_modelObject.activeInHierarchy)
+            if (!Crashed)
             {
                 HandleGroundImpacts();
             }
@@ -58,8 +58,22 @@ namespace Gameplay.Scripts.Player
 
         private void HandleGroundImpacts()
         {
+            HandleLanding();
+
+            HandleCrash(Vector3.forward * Center_To_Nose_Distance);
+            HandleCrash(_modelTransform.localRotation * Vector3.left * Center_To_Wingtip_Distance);
+            HandleCrash(_modelTransform.localRotation * Vector3.right * Center_To_Wingtip_Distance);
+        }
+
+        private float TerrainHeightAtPosition(Vector3 position)
+        {
+            Terrain activeTerrain = _terrains[TerrainGridPosition(position.x)][TerrainGridPosition(position.z)];
+            return activeTerrain.SampleHeight(position);
+        }
+
+        private void HandleLanding()
+        {
             float centerTerrainHeight = TerrainHeightAtPosition(_transform.position);
-            float noseTerrainHeight = TerrainHeightAtPosition(_transform.position + (Vector3.forward * Center_To_Nose_Distance));
 
             OnGround = false;
             if (centerTerrainHeight + Landing_Altitude >= _transform.position.y)
@@ -72,24 +86,51 @@ namespace Gameplay.Scripts.Player
                     _transform.position = new Vector3(_transform.position.x, centerTerrainHeight + Landing_Altitude, _transform.position.z);
                 }
             }
+        }
 
-            if (noseTerrainHeight > _transform.position.y)
+        private void HandleCrash(Vector3 offset)
+        {
+            if (!Crashed)
             {
-                _transform.position = new Vector3(_transform.position.x, centerTerrainHeight, _transform.position.z);
+                float offsetHeight = _transform.position.y + offset.y;
+                float terrainHeightAtOffset = TerrainHeightAtPosition(_transform.position + offset);
 
-                PlayerDeathHandler.TriggerDeath(_playerId, "");
+                if (terrainHeightAtOffset > offsetHeight)
+                {
+                    float centerTerrainHeight = TerrainHeightAtPosition(_transform.position);
+                    _transform.position = new Vector3(_transform.position.x, centerTerrainHeight, _transform.position.z);
+                    PlayerDeathHandler.TriggerDeath(_playerId, "");
+                }
             }
         }
 
-        private float TerrainHeightAtPosition(Vector3 position)
+        public void SetForNewLife()
         {
-            Terrain activeTerrain = _terrains[TerrainGridPosition(position.x)][TerrainGridPosition(position.z)];
-            return activeTerrain.SampleHeight(position);
+            _transform.localPosition = new Vector3(0.0f, Landing_Altitude, 0.0f);
+            _transform.localRotation = Quaternion.Euler(0.0f, 45.0f, 0.0f);
+
+            OnGround = true;
+            Crashed = false;
+        }
+
+        public void SetForDeath()
+        {
+            Crashed = true;
+        }
+
+
+        private void OnTriggerEnter(Collider collider)
+        {
+            if (!Crashed)
+            {
+                if (collider.tag == "Structure") { PlayerDeathHandler.TriggerDeath(_playerId, ""); }
+            }
         }
 
         private const float Terrain_Side_Length = 500.0f;
         private const float Landing_Altitude = 1.05f;
-        private const float Landing_Maximum_Pitch = 5.0f;
+        private const float Landing_Maximum_Pitch = 7.5f;
         private const float Center_To_Nose_Distance = 2.5f;
+        private const float Center_To_Wingtip_Distance = 2.5f;
     }
 }

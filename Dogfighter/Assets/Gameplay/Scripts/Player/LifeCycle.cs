@@ -1,30 +1,32 @@
 ﻿using UnityEngine;
-using Gameplay.Scripts.Status.Messages;
+using Shared.Scripts;
+using Gameplay.Scripts.Status;
 using Gameplay.Scripts.Effects.Particles;
 
 namespace Gameplay.Scripts.Player
 {
     public class LifeCycle : MonoBehaviour
     {
-        private Transform _planeModelTransform;
-        private GameObject _planeModelObject;
-        private Motion _planeMotionController;
-        private ChaseCamera _chaseCamera;
-        private MessageText _startMessagePopup;
-        private RestartTimer _restartTimer;
+        private Transform _modelTransform;
+        private GameObject _modelObject;
+        private Motion _motionController;
+        private Collisions _collisionController;
+        private ChaseCamera _chaseCameraController;
+        private StatusDisplayManager _statusManager;
+        
 
         private void Awake()
         {
             Transform planeTransform = transform.FindChild("Plane");
 
-            _planeModelTransform = planeTransform.FindChild("Plane Model");
-            _planeModelObject = _planeModelTransform.gameObject;
+            _modelTransform = planeTransform.FindChild("Plane Model");
+            _modelObject = _modelTransform.gameObject;
 
-            _planeMotionController = planeTransform.GetComponent<Motion>();
-            _chaseCamera = transform.FindChild("Camera").GetComponent<ChaseCamera>();
+            _motionController = planeTransform.GetComponent<Motion>();
+            _collisionController = planeTransform.GetComponent<Collisions>();
+            _chaseCameraController = transform.FindChild("Camera").GetComponent<ChaseCamera>();
 
-            _startMessagePopup = transform.FindChild("Status Manager").FindChild("Messages").FindChild("Life Start").GetComponent<MessageText>();
-            _restartTimer = transform.FindChild("Status Manager").FindChild("Messages").FindChild("Restart Timer").GetComponent<RestartTimer>();
+            _statusManager = transform.FindChild("Status Manager").GetComponent<StatusDisplayManager>();
         }
 
         private void Start()
@@ -34,16 +36,17 @@ namespace Gameplay.Scripts.Player
 
         public void LaunchDeathSequence()
         {
-            _planeModelObject.SetActive(false);
+            _modelObject.SetActive(false);
+            _statusManager.SetForDeath();
+            _collisionController.SetForDeath();
 
-            ExplosionPool.ActivateExplosion(_planeModelTransform.position);
-
-            _restartTimer.Activate();
+            ExplosionPool.ActivateExplosion(_modelTransform.position);
+            SoundEffectPlayer.PlaySound("explosion");
         }
 
         private void Update()
         {
-            if ((!_planeModelObject.activeInHierarchy) && (_restartTimer.ReadyToRespawn))
+            if ((!_modelObject.activeInHierarchy) && (_statusManager.ReadyToRespawn))
             {
                 Respawn();
             }
@@ -51,11 +54,12 @@ namespace Gameplay.Scripts.Player
 
         private void Respawn()
         {
-            _planeModelObject.SetActive(true);
+            _modelObject.SetActive(true);
 
-            _planeMotionController.SetForNewLife();
-            _chaseCamera.SetForNewLife();
-            _startMessagePopup.Activate();
+            _collisionController.SetForNewLife();
+            _motionController.SetForNewLife();
+            _chaseCameraController.SetForNewLife();
+            _statusManager.SetForNewLife();
         }
     }
 }
