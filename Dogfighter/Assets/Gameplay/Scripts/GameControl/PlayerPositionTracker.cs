@@ -20,7 +20,7 @@ namespace Gameplay.Scripts.GameControl
             if (_radarData == null) { _radarData = new List<RadarData>(); }
 
             _playerRadars.Add(player.tag, player.transform.FindChild("Status Manager").FindChild("Radar").GetComponent<Radar>());
-            _radarData.Add(new RadarData(player.tag, player.transform.FindChild("Plane"), player.GetComponent<AssignColour>().Colour));
+            _radarData.Add(new RadarData(player.tag, player.transform.FindChild("Plane"), player.GetComponent<Player.AssignColour>().Colour));
         }
 
         public void WireUpRadars()

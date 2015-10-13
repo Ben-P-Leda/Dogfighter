@@ -66,6 +66,7 @@
     <Compile Include="Assets\Gameplay\Scripts\Player\Firing.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Player\LifeCycle.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Player\Motion.cs" />
+    <Compile Include="Assets\Gameplay\Scripts\PlayingField\TerrainGrid.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Status\Health.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Status\Messages\MessageText.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Status\Messages\RestartTimer.cs" />
@@ -74,8 +75,9 @@
     <Compile Include="Assets\Gameplay\Scripts\Status\StatusDisplayManager.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Status\Timer.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Target\ActivityTimer.cs" />
-    <Compile Include="Assets\Gameplay\Scripts\Target\AssignTargetColour.cs" />
+    <Compile Include="Assets\Gameplay\Scripts\Target\AssignColour.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Target\Collisions.cs" />
+    <Compile Include="Assets\Gameplay\Scripts\Target\Motion.cs" />
     <Compile Include="Assets\Gameplay\Scripts\Target\RadarEcho.cs" />
     <Compile Include="Assets\PlayerSelect\Scripts\Navigation.cs" />
     <Compile Include="Assets\PlayerSelect\Scripts\Prompts\PromptController.cs" />

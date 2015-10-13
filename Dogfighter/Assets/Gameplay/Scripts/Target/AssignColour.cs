@@ -2,7 +2,7 @@
 
 namespace Gameplay.Scripts.Target
 {
-    public class AssignTargetColour : MonoBehaviour
+    public class AssignColour : MonoBehaviour
     {
         public Color Colour;
 

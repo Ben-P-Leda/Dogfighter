@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Gameplay.Scripts.GameControl;
+using Gameplay.Scripts.PlayingField;
 
 namespace Gameplay.Scripts.Player
 {
@@ -9,8 +10,6 @@ namespace Gameplay.Scripts.Player
         private Transform _modelTransform;
         private string _playerId;
 
-        private Terrain[][] _terrains;
-
         public bool OnGround { get; private set; }
         public bool Crashed { get; private set; }
 
@@ -19,33 +18,6 @@ namespace Gameplay.Scripts.Player
             _playerId = transform.parent.tag;
             _transform = transform;
             _modelTransform = _transform.FindChild("Plane Model").transform;
-
-            CreateTerrainGrid();
-        }
-
-        private void CreateTerrainGrid()
-        {
-            int maxX = 0;
-            int maxZ = 0;
-
-            foreach (Terrain terrain in Terrain.activeTerrains)
-            {
-                maxX = Mathf.Max(TerrainGridPosition(terrain.transform.position.x), maxX);
-                maxZ = Mathf.Max(TerrainGridPosition(terrain.transform.position.z), maxZ);
-            }
-
-            _terrains = new Terrain[maxX + 1][];
-            for (int i = 0; i < maxX + 1; i++) { _terrains[i] = new Terrain[maxZ + 1]; }
-
-            foreach (Terrain terrain in Terrain.activeTerrains)
-            {
-                _terrains[TerrainGridPosition(terrain.transform.position.x)][TerrainGridPosition(terrain.transform.position.z)] = terrain;
-            }
-        }
-
-        private int TerrainGridPosition(float worldPosition)
-        {
-            return Mathf.FloorToInt(worldPosition / Terrain_Side_Length);
         }
 
         private void FixedUpdate()
@@ -65,15 +37,9 @@ namespace Gameplay.Scripts.Player
             HandleCrash(_modelTransform.localRotation * Vector3.right * Center_To_Wingtip_Distance);
         }
 
-        private float TerrainHeightAtPosition(Vector3 position)
-        {
-            Terrain activeTerrain = _terrains[TerrainGridPosition(position.x)][TerrainGridPosition(position.z)];
-            return activeTerrain.SampleHeight(position);
-        }
-
         private void HandleLanding()
         {
-            float centerTerrainHeight = TerrainHeightAtPosition(_transform.position);
+            float centerTerrainHeight = TerrainGrid.TerrainHeightAtPosition(_transform.position);
 
             OnGround = false;
             if (centerTerrainHeight + Landing_Altitude >= _transform.position.y)
@@ -93,11 +59,11 @@ namespace Gameplay.Scripts.Player
             if (!Crashed)
             {
                 float offsetHeight = _transform.position.y + offset.y;
-                float terrainHeightAtOffset = TerrainHeightAtPosition(_transform.position + offset);
+                float terrainHeightAtOffset = TerrainGrid.TerrainHeightAtPosition(_transform.position + offset);
 
                 if (terrainHeightAtOffset > offsetHeight)
                 {
-                    float centerTerrainHeight = TerrainHeightAtPosition(_transform.position);
+                    float centerTerrainHeight = TerrainGrid.TerrainHeightAtPosition(_transform.position);
                     _transform.position = new Vector3(_transform.position.x, centerTerrainHeight, _transform.position.z);
                     PlayerDeathHandler.TriggerDeath(_playerId, "");
                 }
@@ -127,7 +93,6 @@ namespace Gameplay.Scripts.Player
             }
         }
 
-        private const float Terrain_Side_Length = 500.0f;
         private const float Landing_Altitude = 1.05f;
         private const float Landing_Maximum_Pitch = 7.5f;
         private const float Landing_Maximum_Roll = 0.001f;
