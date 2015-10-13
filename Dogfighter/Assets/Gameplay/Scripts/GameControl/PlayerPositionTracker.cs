@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Gameplay.Scripts.Status;
 using Gameplay.Scripts.GameControl.Helpers;
 using Gameplay.Scripts.Player;
+using Gameplay.Scripts.Target;
 
 namespace Gameplay.Scripts.GameControl
 {
@@ -10,6 +11,8 @@ namespace Gameplay.Scripts.GameControl
     {
         private Dictionary<string, Radar> _playerRadars;
         private List<RadarData> _radarData;
+
+        public GameObject Target;
 
         public void RegisterPlayer(GameObject player)
         {
@@ -24,7 +27,7 @@ namespace Gameplay.Scripts.GameControl
         {
             foreach (KeyValuePair<string, Radar> kvp in _playerRadars)
             {
-                kvp.Value.PlayersToTrack = CreateRadarDataForPlayer(kvp.Key);
+                kvp.Value.ObjectsToTrack = CreateRadarDataForPlayer(kvp.Key);
             }
         }
 
@@ -37,6 +40,8 @@ namespace Gameplay.Scripts.GameControl
                 {
                     data.Add(_radarData[i]);
                 }
+
+                data.Add(Target.GetComponent<RadarEcho>().Data);
             }
 
             return data.ToArray();

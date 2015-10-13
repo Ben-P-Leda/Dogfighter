@@ -1,17 +1,13 @@
 ﻿using UnityEngine;
-using Shared.Scripts;
+using Shared.Scripts.Gui;
 
 namespace Gameplay.Scripts.Status.Messages
 {
-    public class MessageText : MonoBehaviour
+    public class MessageText : GuiText
     {
-        private Rect _textArea;
-        private GUIStyle _guiStyle;
         private float _remainingDuration;
         private bool _initialized;
 
-        public Font Font;
-        public string Text;
         public float Duration;
 
         public virtual void Activate()
@@ -20,7 +16,7 @@ namespace Gameplay.Scripts.Status.Messages
 
             if (!_initialized) { SetUpDisplay(); }
 
-            _guiStyle.normal.textColor = Color.black;
+            GuiStyle.normal.textColor = Color.black;
             _remainingDuration = Duration;
         }
 
@@ -29,25 +25,10 @@ namespace Gameplay.Scripts.Status.Messages
             _initialized = false;
         }
 
-        private void SetUpDisplay()
+        public void SetUpDisplay()
         {
             StatusDisplayManager manager = transform.parent.parent.GetComponent<StatusDisplayManager>();
-
-            _textArea = manager.ViewportScreenArea;
-
-            _guiStyle = new GUIStyle();
-            _guiStyle.font = Font;
-            _guiStyle.fontSize = (int)(26 * manager.Scaling);
-            _guiStyle.wordWrap = true;
-            _guiStyle.alignment = TextAnchor.MiddleCenter;
-            _guiStyle.normal.textColor = Color.black;
-
-            _initialized = true;
-        }
-
-        private void OnGUI()
-        {
-            GUI.Label(_textArea, Text, _guiStyle);
+            base.SetUpDisplay(manager.ViewportScreenArea, manager.Scaling);
         }
 
         private void FixedUpdate()
@@ -56,9 +37,9 @@ namespace Gameplay.Scripts.Status.Messages
             {
                 _remainingDuration -= Time.deltaTime;
             }
-            else if (_guiStyle.normal.textColor.a > 0.0f)
+            else if (GuiStyle.normal.textColor.a > 0.0f)
             {
-                _guiStyle.normal.textColor = new Color(0.0f, 0.0f, 0.0f, _guiStyle.normal.textColor.a - Time.deltaTime);
+                GuiStyle.normal.textColor = new Color(0.0f, 0.0f, 0.0f, GuiStyle.normal.textColor.a - Time.deltaTime);
             }
             else
             {

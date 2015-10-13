@@ -76,7 +76,7 @@ namespace Gameplay.Scripts.Player
 
         private void SetInControlState()
         {
-            if (_collisionController.OnGround)
+           if (_collisionController.OnGround)
             {
                 _outOfControl = false;
             }
@@ -124,14 +124,14 @@ namespace Gameplay.Scripts.Player
 
             if (Falling())
             {
-                pitchRotation = Mathf.Max(0.0f, pitchRotation);
+                pitchRotation = Mathf.Min(0.0f, pitchRotation);
             }
             _transform.Rotate(pitchRotation, controlValues.x * TurnSpeed, rollNegation);
         }
 
         private bool Falling()
         {
-            return (_transform.localEulerAngles.y >= Maximum_Fall_Angle) && (_transform.localEulerAngles.y < 180.0f);
+            return (_transform.localEulerAngles.x >= Maximum_Fall_Angle) && (_transform.localEulerAngles.x < 180.0f);
         }
 
         private void UpdateRollForBanking(Vector2 controlValues)
@@ -180,7 +180,7 @@ namespace Gameplay.Scripts.Player
         private const float Excess_Altitude_Drag = 5.0f;
         private const float Minimum_Flying_Speed = 10.0f;
         private const float Minimum_Takeoff_Speed = 30.0f;
-        private const float Control_Regain_Speed = 40.0f;
+        private const float Control_Regain_Speed = 20.0f;
         private const float Maximum_Fall_Angle = 75.0f;
     }
 }

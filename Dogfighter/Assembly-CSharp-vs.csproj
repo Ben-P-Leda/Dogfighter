@@ -48,11 +48,16 @@
   <ItemGroup>
      <Compile Include="Assets\Gameplay\Scripts\Effects\Particles\ExplosionPool.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Effects\Particles\PooledParticleEffect.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\EndRoundHandler.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\Helpers\RadarData.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerDeathHandler.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerPositionTracker.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerRegistration.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\PlayerToPlayerDamage.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\PostGame\EndRoundDisplayManager.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\PostGame\EndRoundText.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\PostGame\RestartListener.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\GameControl\PostGame\WinnerText.cs" />
      <Compile Include="Assets\Gameplay\Scripts\GameControl\RoundTimer.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\AssignColour.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Player\ChaseCamera.cs" />
@@ -67,8 +72,25 @@
      <Compile Include="Assets\Gameplay\Scripts\Status\Speed.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\StatusDisplayManager.cs" />
      <Compile Include="Assets\Gameplay\Scripts\Status\Timer.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Target\ActivityTimer.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Target\AssignTargetColour.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Target\Collisions.cs" />
+     <Compile Include="Assets\Gameplay\Scripts\Target\RadarEcho.cs" />
+     <Compile Include="Assets\PlayerSelect\Scripts\Navigation.cs" />
+     <Compile Include="Assets\PlayerSelect\Scripts\Prompts\PromptController.cs" />
+     <Compile Include="Assets\PlayerSelect\Scripts\Prompts\PromptText.cs" />
+     <Compile Include="Assets\PlayerSelect\Scripts\SelectionHandler.cs" />
+     <Compile Include="Assets\PlayerSelect\Scripts\Selector.cs" />
+     <Compile Include="Assets\Shared\Scripts\GameData\CurrentGame.cs" />
+     <Compile Include="Assets\Shared\Scripts\GameData\PlayerData.cs" />
      <Compile Include="Assets\Shared\Scripts\GenericObjectPool.cs" />
+     <Compile Include="Assets\Shared\Scripts\Gui\GuiManager.cs" />
+     <Compile Include="Assets\Shared\Scripts\Gui\GuiText.cs" />
      <Compile Include="Assets\Shared\Scripts\SoundEffectPlayer.cs" />
+     <Compile Include="Assets\Title\Scripts\CameraMotion.cs" />
+     <Compile Include="Assets\Title\Scripts\Chrome\ChromeController.cs" />
+     <Compile Include="Assets\Title\Scripts\Chrome\ChromeText.cs" />
+     <Compile Include="Assets\Title\Scripts\GameStartListener.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

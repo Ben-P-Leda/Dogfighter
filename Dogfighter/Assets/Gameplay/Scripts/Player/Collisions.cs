@@ -80,7 +80,7 @@ namespace Gameplay.Scripts.Player
             {
                 float pitch = _transform.eulerAngles.x;
                 float roll = _transform.eulerAngles.z;
-                if ((pitch >= 0.0f) && (pitch <= Landing_Maximum_Pitch) && (roll == 0.0f))
+                if ((pitch >= 0.0f) && (pitch <= Landing_Maximum_Pitch) && (Mathf.Abs(roll) < Landing_Maximum_Roll))
                 {
                     OnGround = true;
                     _transform.position = new Vector3(_transform.position.x, centerTerrainHeight + Landing_Altitude, _transform.position.z);
@@ -106,7 +106,7 @@ namespace Gameplay.Scripts.Player
 
         public void SetForNewLife()
         {
-            _transform.localPosition = new Vector3(0.0f, Landing_Altitude, 0.0f);
+            _transform.localPosition = new Vector3(0.0f, Landing_Altitude - 0.001f, 0.0f);
             _transform.localRotation = Quaternion.Euler(0.0f, 45.0f, 0.0f);
 
             OnGround = true;
@@ -123,13 +123,14 @@ namespace Gameplay.Scripts.Player
         {
             if (!Crashed)
             {
-                if (collider.tag == "Structure") { PlayerDeathHandler.TriggerDeath(_playerId, ""); }
+                if ((collider.tag == "Structure") || (collider.tag.StartsWith("Player"))) { PlayerDeathHandler.TriggerDeath(_playerId, ""); }
             }
         }
 
         private const float Terrain_Side_Length = 500.0f;
         private const float Landing_Altitude = 1.05f;
         private const float Landing_Maximum_Pitch = 7.5f;
+        private const float Landing_Maximum_Roll = 0.001f;
         private const float Center_To_Nose_Distance = 2.5f;
         private const float Center_To_Wingtip_Distance = 2.5f;
     }

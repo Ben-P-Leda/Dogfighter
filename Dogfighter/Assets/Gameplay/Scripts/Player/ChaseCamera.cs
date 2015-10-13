@@ -13,6 +13,9 @@ namespace Gameplay.Scripts.Player
         {
             _transform = transform;
             _targetTransform = ChaseTarget.transform;
+
+            // Set this dependent on whether we have 2/3/4 players
+            //_transform.GetComponent<Camera>().rect = BLAH
         }
 
         private void FixedUpdate()

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Shared.Scripts.GameData;
 using Gameplay.Scripts.Player;
 
 namespace Gameplay.Scripts.GameControl
@@ -25,6 +26,8 @@ namespace Gameplay.Scripts.GameControl
         private void HandleDeath(string deadPlayerId, string killingPlayerId)
         {
             _lifeCycleControllers[deadPlayerId].LaunchDeathSequence();
+
+            CurrentGame.LogPlayerDeath(deadPlayerId, killingPlayerId);
         }
     }
 }

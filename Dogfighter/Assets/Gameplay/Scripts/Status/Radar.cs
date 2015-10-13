@@ -14,7 +14,7 @@ namespace Gameplay.Scripts.Status
         private Vector2 _center;
         private float _scaling;
 
-        public RadarData[] PlayersToTrack { private get; set; }
+        public RadarData[] ObjectsToTrack { private get; set; }
 
         public Texture BaseImage;
         public Texture BlipImage;
@@ -45,21 +45,21 @@ namespace Gameplay.Scripts.Status
             GUI.DrawTexture(_displayArea, BaseImage);
             GUIUtility.RotateAroundPivot(0.0f, _center);
 
-            DrawPlayerBlips();
+            DrawBlips();
         }
 
-        private void DrawPlayerBlips()
+        private void DrawBlips()
         {
-            for (int i = 0; i < PlayersToTrack.Length; i++)
+            for (int i = 0; i < ObjectsToTrack.Length; i++)
             {
-                if (DisplayOnRadar(PlayersToTrack[i].Position))
+                if ((ObjectsToTrack[i].Visible) && (InRadarRange(ObjectsToTrack[i].Position)))
                 {
-                    DrawBlip(PlayersToTrack[i].Position, PlayersToTrack[i].Colour);
+                    DrawBlip(ObjectsToTrack[i].Position, ObjectsToTrack[i].Colour);
                 }
             }
         }
 
-        private bool DisplayOnRadar(Vector3 objectPosition)
+        private bool InRadarRange(Vector3 objectPosition)
         {
             float xDistance = Mathf.Abs(_planeTransform.position.x - objectPosition.x);
             float zDistance = Mathf.Abs(_planeTransform.position.z - objectPosition.z);
