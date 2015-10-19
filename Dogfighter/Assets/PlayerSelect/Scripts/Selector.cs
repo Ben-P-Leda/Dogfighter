@@ -32,8 +32,6 @@ namespace PlayerSelect.Scripts
 
             _lastStepValue = 0.0f;
             _buttonResetRequired = false;
-
-            Debug.Log(_playerId + " selector active");
         }
 
         private void Update()
@@ -92,8 +90,6 @@ namespace PlayerSelect.Scripts
                 _selectionMade = true;
                 CurrentGame.Players[_playerId].SelectedAvatar = _selected;
                 CurrentGame.Players[_playerId].Ready = true;
-
-                Debug.Log(_playerId + " selected");
             }
         }
 
@@ -104,8 +100,6 @@ namespace PlayerSelect.Scripts
                 CurrentGame.Players[_playerId].IsActive = true;
                 _selected = CurrentGame.Players[_playerId].SelectedAvatar;
                 _buttonResetRequired = true;
-
-                Debug.Log(_playerId + " active");
             }
         }
     }

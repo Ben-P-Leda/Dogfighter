@@ -7,8 +7,17 @@ namespace PlayerSelect.Scripts
     {
         private void Update()
         {
-            if (CurrentGame.ReadyToStartGame()) { Application.LoadLevel("TestScene"); }
+            if (ReadyToStartGame()) { Application.LoadLevel("TestScene"); }
             if (Input.GetKeyDown(KeyCode.Escape)) { Application.LoadLevel("Title"); }
+        }
+
+        private bool ReadyToStartGame()
+        {
+            bool readyToStart = false;
+
+            if (CurrentGame.ReadyPlayerCount() == CurrentGame.Maximum_Players) { readyToStart = true; }
+
+            return readyToStart;
         }
     }
 }

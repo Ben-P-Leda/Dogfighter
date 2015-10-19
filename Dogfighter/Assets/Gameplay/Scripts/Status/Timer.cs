@@ -33,13 +33,9 @@ namespace Gameplay.Scripts.Status
 
         private void Update()
         {
-            float timeRemaining = RoundTimer.TimeRemaining;
+            _displayText = Utility.TimeText(RoundTimer.TimeRemaining);
 
-            _displayText = string.Format("{0}:{1}{2}",
-                Mathf.FloorToInt(Mathf.Max(timeRemaining / 60.0f, 0.0f)),
-                Mathf.Max(timeRemaining % 60.0f) < 10.0f ? "0" : "",
-                Mathf.FloorToInt(Mathf.Max(timeRemaining % 60.0f)));
-        }
+       }
 
         private void OnGUI()
         {

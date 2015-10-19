@@ -20,13 +20,14 @@ namespace PlayerSelect.Scripts.Prompts
         public void SetUpDisplay()
         {
             GuiManager manager = transform.GetComponent<GuiManager>();
+
+            Debug.Log(transform.parent.tag + ": " + manager.ViewportScreenArea.ToString());
+
             base.SetUpDisplay(manager.ViewportScreenArea, manager.Scaling);
         }
 
         private void Update()
         {
-            Debug.Log(_playerId + ":" + CurrentGame.Players[_playerId].IsActive.ToString());
-
             if (CurrentGame.Players[_playerId].IsActive)
             {
                 Text = CurrentGame.Players[_playerId].Ready

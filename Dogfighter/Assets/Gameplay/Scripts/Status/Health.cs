@@ -9,8 +9,8 @@ namespace Gameplay.Scripts.Status
         private float _hitPoints;
         private string _playerId;
 
-        private Rect _displayArea;
-        public Rect _barArea;
+        public Rect _displayArea;
+        private Rect _barArea;
         private Color _barColour;
 
         public float StartingHitPoints;

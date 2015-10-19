@@ -30,6 +30,8 @@ namespace Gameplay.Scripts.Status
         {
             _startMessagePopup.SetUpDisplay();
             _restartTimer.SetUpDisplay();
+
+            transform.FindChild("Radar").GetComponent<Radar>().SetUpDisplay();
         }
 
         protected override Camera GetCamera()

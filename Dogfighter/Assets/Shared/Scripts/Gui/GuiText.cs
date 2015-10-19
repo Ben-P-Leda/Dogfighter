@@ -17,9 +17,11 @@ namespace Shared.Scripts.Gui
         {
             _textArea = new Rect(
                 viewportScreenArea.x + viewportScreenArea.width * DisplayArea.x,
-                viewportScreenArea.y + viewportScreenArea.height * DisplayArea.y,
+                (Screen.height - viewportScreenArea.height) - (viewportScreenArea.y - viewportScreenArea.height * DisplayArea.y),
                 viewportScreenArea.width * DisplayArea.width,
                 viewportScreenArea.height * DisplayArea.height);
+
+            Debug.Log(_textArea.ToString());
 
             GuiStyle = new GUIStyle();
             GuiStyle.font = Font;

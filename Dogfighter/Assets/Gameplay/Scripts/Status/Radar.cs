@@ -24,12 +24,7 @@ namespace Gameplay.Scripts.Status
             _planeTransform = transform.parent.parent.FindChild("Plane");
         }
 
-        private void Start()
-        {
-            SetUpDisplay();
-        }
-
-        private void SetUpDisplay()
+        public void SetUpDisplay()
         {
             StatusDisplayManager manager = transform.parent.GetComponent<StatusDisplayManager>();
             _scaling = manager.Scaling;
@@ -73,6 +68,7 @@ namespace Gameplay.Scripts.Status
             distanceFromCenter = (distanceFromCenter / Maximum_Detection_Range) * _radius;
 
             float sideLength = BlipImage.width * _scaling * (1.0f - ((_planeTransform.position.y - objectPosition.y) * Altitude_Blip_Size_Modifier));
+
             Rect blipRect = new Rect(
                 _center.x + distanceFromCenter.x - (sideLength * 0.5f),
                 _center.y + distanceFromCenter.y - (sideLength * 0.5f),

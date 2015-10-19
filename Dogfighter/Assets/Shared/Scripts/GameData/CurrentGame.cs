@@ -32,15 +32,15 @@ namespace Shared.Scripts.GameData
             _players[PlayerId].IsActive = true;
         }
 
-        public static bool ReadyToStartGame()
+        public static int ReadyPlayerCount()
         {
-            int ReadyPlayerCount = 0;
+            int readyPlayerCount = 0;
             foreach (KeyValuePair<string, PlayerData> kvp in _players)
             {
-                if (kvp.Value.Ready) { ReadyPlayerCount++; }
+                if (kvp.Value.Ready) { readyPlayerCount++; }
             }
 
-            return ReadyPlayerCount == Maximum_Players;
+            return readyPlayerCount;
         }
 
         public static void LogPlayerDeath(string deadPlayerId, string killingPlayerId)
@@ -78,6 +78,6 @@ namespace Shared.Scripts.GameData
             return winningPlayerId;
         }
 
-        public const int Maximum_Players = 2;
+        public const int Maximum_Players = 4;
     }
 }

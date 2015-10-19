@@ -81,6 +81,7 @@
     <Compile Include="Assets\Gameplay\Scripts\Target\RadarEcho.cs" />
     <Compile Include="Assets\PlayerSelect\Scripts\Navigation.cs" />
     <Compile Include="Assets\PlayerSelect\Scripts\Prompts\PromptController.cs" />
+    <Compile Include="Assets\PlayerSelect\Scripts\Prompts\JoiningTimer.cs" />
     <Compile Include="Assets\PlayerSelect\Scripts\Prompts\PromptText.cs" />
     <Compile Include="Assets\PlayerSelect\Scripts\SelectionHandler.cs" />
     <Compile Include="Assets\PlayerSelect\Scripts\Selector.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Assets\Shared\Scripts\Gui\GuiManager.cs" />
     <Compile Include="Assets\Shared\Scripts\Gui\GuiText.cs" />
     <Compile Include="Assets\Shared\Scripts\SoundEffectPlayer.cs" />
+    <Compile Include="Assets\Shared\Scripts\Utility.cs" />
     <Compile Include="Assets\Title\Scripts\CameraMotion.cs" />
     <Compile Include="Assets\Title\Scripts\Chrome\ChromeController.cs" />
     <Compile Include="Assets\Title\Scripts\Chrome\ChromeText.cs" />

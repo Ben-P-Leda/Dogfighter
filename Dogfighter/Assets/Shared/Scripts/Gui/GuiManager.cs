@@ -36,10 +36,10 @@ namespace Shared.Scripts.Gui
         {
             Camera camera = GetCamera();
 
-            Vector3 topLeft = camera.ViewportToScreenPoint(Vector3.zero);
-            Vector3 bottomRight = camera.ViewportToScreenPoint(new Vector3(1.0f, 1.0f, 0.0f));
+            Vector3 bottomLeft = camera.ViewportToScreenPoint(Vector3.zero);
+            Vector3 topRight = camera.ViewportToScreenPoint(new Vector3(1.0f, 1.0f, 0.0f));
 
-            _viewportScreenArea = new Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+            _viewportScreenArea = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
         }
 
         protected virtual Camera GetCamera()
@@ -57,7 +57,7 @@ namespace Shared.Scripts.Gui
             height *= Scaling;
 
             float left = _viewportScreenArea.x + ((_viewportScreenArea.width - width) / 2.0f);
-            float top = _viewportScreenArea.y + ((_viewportScreenArea.height - height) / 2.0f);
+            float top = Screen.height - (_viewportScreenArea.y + ((_viewportScreenArea.height + height) / 2.0f));
 
             if ((alignment == TextAnchor.LowerLeft) || (alignment == TextAnchor.MiddleLeft) || (alignment == TextAnchor.UpperLeft))
             {
@@ -70,14 +70,37 @@ namespace Shared.Scripts.Gui
 
             if ((alignment == TextAnchor.UpperLeft) || (alignment == TextAnchor.UpperCenter) || (alignment == TextAnchor.UpperRight))
             {
-                top = _viewportScreenArea.y + verticalMargin;
+                top = Screen.height - (_viewportScreenArea.y + _viewportScreenArea.height - verticalMargin);
             }
             else if ((alignment == TextAnchor.LowerLeft) || (alignment == TextAnchor.LowerCenter) || (alignment == TextAnchor.LowerRight))
             {
-                top = (_viewportScreenArea.y + _viewportScreenArea.height) - (height + verticalMargin);
+                top = Screen.height - (_viewportScreenArea.y + verticalMargin + height);
             }
 
             return new Rect(left, top, width, height);
+
+            //float left = _viewportScreenArea.x + ((_viewportScreenArea.width - width) / 2.0f);
+            //float top = _viewportScreenArea.y + ((_viewportScreenArea.height - height) / 2.0f);
+
+            //if ((alignment == TextAnchor.LowerLeft) || (alignment == TextAnchor.MiddleLeft) || (alignment == TextAnchor.UpperLeft))
+            //{
+            //    left = _viewportScreenArea.x + horizontalMargin;
+            //}
+            //else if ((alignment == TextAnchor.LowerRight) || (alignment == TextAnchor.MiddleRight) || (alignment == TextAnchor.UpperRight))
+            //{
+            //    left = (_viewportScreenArea.x + _viewportScreenArea.width) - (width + horizontalMargin);
+            //}
+
+            //if ((alignment == TextAnchor.UpperLeft) || (alignment == TextAnchor.UpperCenter) || (alignment == TextAnchor.UpperRight))
+            //{
+            //    top = _viewportScreenArea.y + verticalMargin;
+            //}
+            //else if ((alignment == TextAnchor.LowerLeft) || (alignment == TextAnchor.LowerCenter) || (alignment == TextAnchor.LowerRight))
+            //{
+            //    top = (_viewportScreenArea.y + _viewportScreenArea.height) - (height + verticalMargin);
+            //}
+
+            //return new Rect(left, top, width, height);
         }
 
         private const float One_To_One_Screen_Height = 675.0f;
